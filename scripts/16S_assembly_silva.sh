@@ -80,6 +80,7 @@ do
 
 cd ${mydir%_}
 # Search 
+echo "Seaching Silva Database"
 for i in *.cons.fa; do bash ${script_path}/run_blast_silva.sh $i; done
 #Update query name
 for i in *.cons.blastn.archive.outFmt_6.tsv; do sed -i "s/Consensus/${i%.cons.blastn.archive.outFmt_6.tsv}/" $i; done
@@ -103,6 +104,11 @@ if [ -f samples.cov_stats.csv ]; then
 fi
 for i in *.cov_stats.csv; do cut -d',' -f1,3,4,6 ${i} | tail -n1 >> samples.cov_stats.csv; done
 
+# Count primers actually used in each assembly 
+if [ -f all_samples_primer_count.csv ]; then
+ rm  all_samples_primer_counts.tsv;
+fi
+for i in *.json; do ${script_path}/count_sanger_reads.sh $i >> all_samples_primer_counts.tsv; done
 
 # grep selected primers only
 primers=${mydir%_}
@@ -122,11 +128,15 @@ done
 Rscript  ${script_path}/mean_score_qc.R selected_qc_data.csv
 
 # generate summary table
-Rscript ${script_path}/summary.R
+Rscript ${script_path}/summary_silva.R
+
+# combine 2 summary files + sanger read count file
+#Rscript ${script_path}/sanger_assembly_summary.R
 
 # copy files to the output folder
-cp 16S_summary.csv ../"$out_path/16S_silva_summary.csv"
-cp *.cons.fa  ../"$out_path/Assemblies"
+cp 16S_silva_summary.csv ../$out_path/"16S_silva_summary.csv"
+cp all_samples_primer_counts.tsv ../$out_path/
+cp *.cons.fa  ../$out_path/"Assemblies"
 
 cd -
    

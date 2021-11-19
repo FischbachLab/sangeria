@@ -12,7 +12,7 @@ qc_data <- read_excel(input_qcfile,  #"/home/ec2-user/efs/docker/Xmeng/16S/Sange
 col_names = c("Sample", "LOR","Q40", "Q20","Score", "QC Notes"), skip = 1
 #.name_repair = "universal" 
 )
-
+qc_data$Score <- as.numeric(as.character(qc_data$Score))
 head(qc_data)
 
 filtered_qc <- filter(qc_data,  LOR >= 0, Score >= 25 )

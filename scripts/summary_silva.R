@@ -4,8 +4,8 @@ library(tidyverse)
 
 
 #strain_df = read_tsv("/home/ec2-user/efs/docker/Xmeng/16S/Sanger/PM013_2/genus.list", col_names = FALSE)
-top3_df = read_tsv("all_samples_top3_ncbi.tsv", col_names = FALSE)
-filtered3_df = read_tsv("all_samples_filtered3_ncbi.tsv", col_names = FALSE)
+top3_df = read_tsv("all_samples_top3.tsv", col_names = FALSE)
+filtered3_df = read_tsv("all_samples_filtered3.tsv", col_names = FALSE)
 cov_df = read_csv("samples.cov_stats.csv", col_names = FALSE)
 score_df = read_csv("qc_mean_score.csv", col_names = FALSE)
 
@@ -28,24 +28,24 @@ colnames(summary_df3 ) <- c("Sample_ID", "Observed_Top_Annotation", "Top_Identit
 col_order <- c("Sample_ID", "Observed_Top_Annotation", "Top_Identity(%)", "Top_Qcov(%)", "Filtered_Annotation", "Filtered_Identity(%)", "Completeness(%)", "Adjusted_Qcov(%)", "Length", "num_primer_reads", "mean_coverage", "sd_coverage", "mean_qc_score" )
 my_summary <- summary_df3[, col_order]
 
-
 # From Melhem's requests
 # Minimum length required 1430 bp for both silva and ncbi analysis
 # Minimum Completeness% 91% for both silva and ncbi analysis
-# NCBI Adjusted query cover:
-#              - <93.5%: Fail
-#              -93.5%-<96.0%: To be reviewed
-#              -96.0% and above: Pass
+# Silva
+#  -97.3%  and above: pass
+#  -94.0-<97.3: to be reviewed
+#  -<94.0: Fail
 
-#my_summary <- mutate(my_summary, Status = ifelse( my_summary[,7] >=91 & my_summary[,8] >=96 & Length >= 1430, "Pass", "Fail")) 
-my_summary <- mutate(my_summary, Status = case_when( my_summary[,7] >=91 & my_summary[,8] >=96 & Length >= 1430 ~ "Pass",
-                                                     my_summary[,7] >=91 & my_summary[,8] >=93.5 & my_summary[,8] < 96 & Length >= 1430 ~ "Review",
-                                                     TRUE ~ "Fail"))
+#my_summary <- mutate(my_summary, Status = ifelse( my_summary[,7] >=91 & my_summary[,8] >=97.3 & Length >= 1430, "Pass", "Fail"))
+my_summary <- mutate(my_summary, Status = case_when( my_summary[,7] >=91 & my_summary[,8] >=97.3 & Length >= 1430 ~ "Pass",
+						     my_summary[,7] >=91 & my_summary[,8] >=94 & my_summary[,8] < 97.3 & Length >= 1430 ~ "Review",
+						     TRUE ~ "Fail"))      
+
 
 #head(summary_df2)
 #write_csv(summary_df, "tmp1.csv")
 #write_csv(summary_df2, "tmp2.csv")
 # write the summary file
-write_csv(my_summary, "16S_ncbi_summary.csv")
+write_csv(my_summary, "16S_silva_summary.csv")
 
 

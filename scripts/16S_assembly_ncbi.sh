@@ -12,7 +12,7 @@ mygroup=${1:?"Specify a Group name"}
 
 input_path="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/QB_RAW_DATA_by_group/${mygroup}"
 
-script_path="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts_ncbi"
+script_path="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts"
 
 ab1_path="${input_path}/all_ab1_files/"
 qc_path="${input_path}/qc_files"
@@ -82,6 +82,7 @@ do
 
 cd "${mydir%_}_ncbi"
 # Search 
+echo "Seaching NCBI 16S Database"
 for i in *.cons.fa; do bash ${script_path}/run_blast_ncbi.sh $i; done
 #Update query name
 for i in *.cons.blastn.archive.outFmt_6.tsv; do sed -i "s/Consensus/${i%.cons.blastn.archive.outFmt_6.tsv}/" $i; done
@@ -96,8 +97,8 @@ for i in *.cons.blastn.archive.outFmt_6.tsv; do cut -f1,3,13,15,16 $i | head -n 
 
 for i in *.cons.blastn.archive.outFmt_6.tsv; do head -n 3 $i | awk -F"\t" '{if(min==""){min=$13}; if($14<min) {min=$14}}  { print $1"\t"$16"\t"$3"\t"$15"\t"$13*100/$14"\t"($4-$5)*100/min}'  >  ${i%.cons.blastn.archive.outFmt_6.tsv}.filtered3hits.tsv; done
 
-cat *.top3hits.tsv > all_samples_top3.tsv
-cat *.filtered3hits.tsv > all_samples_filtered3.tsv
+cat *.top3hits.tsv > all_samples_top3_ncbi.tsv
+cat *.filtered3hits.tsv > all_samples_filtered3_ncbi.tsv
 
 # calculate coverage 
 #for i in *.json; do python ${script_path}/calculate_coverage_sanger.py $i ${i%.json}; done
@@ -119,11 +120,11 @@ if [ -f selected_qc_data.csv ]; then
 fi
 
 for i in "${line[@]}"; do
-    grep  $i ${full_qc_csv} >> selected_qc_data.csv
+    grep $i ${full_qc_csv} >> selected_qc_data.csv
 done
 
 # process the filtered qc data
-Rscript  ${script_path}/mean_score_qc.R selected_qc_data.csv
+Rscript ${script_path}/mean_score_qc.R selected_qc_data.csv
 
 # generate summary table
 Rscript ${script_path}/summary_ncbi.R

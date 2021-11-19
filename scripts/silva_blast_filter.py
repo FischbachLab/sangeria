@@ -51,9 +51,9 @@ def process_blast_file_filter_keywords(silva_dict, input_file, prefix):
             qlen = int(split_line[-3])
             qcoverage = split_line[-1]
             slen = int(split_line[-2])
-            # compute completness
+            # compute completeness:  (qlen/slen) * 100
             completeness = round(qlen/slen*100, 2) 
-            # compute query coverage
+            # compute query coverage: ((alignment_length - mismatch) / min(slen, qlen)) * 100
             alignment=int(split_line[3])
             mismatch=int(split_line[4])
             qcov = round((alignment - mismatch) / min(slen, qlen),4)*100
