@@ -6,10 +6,12 @@ set -o pipefail
 
 TASK=${TASK:-"blastn"}
 QUERY_EXT=${QUERY_EXT:-".fa"}
-THREADS=${THREADS:-8}
+THREADS=${THREADS:-12}
 
 QUERY_PATH=${1}
-LOCAL_DB=${2:-"/home/ec2-user/efs/docker/Xmeng/BLAST/blastdb/16S_ribosomal_RNA"}
+
+LOCAL_DB=${2:-"/mnt/efs/databases/Blast/16S_ribosomal_RNA/16S_ribosomal_RNA"}
+#LOCAL_DB=${2:-"/mnt/efs/scratch/Xmeng/BLAST/blastdb/16S_ribosomal_RNA"}
 # filtered Silva NR
 #/home/ec2-user/efs/docker/Xmeng/16S/Sanger/silva_db_filtered/Filtered_SILVA_138.1_SSURef_NR99_tax_silva.fasta"
 #/home/ec2-user/efs/docker/Xmeng/BLAST/blastdb/SILVA_138.1_SSURef_tax_silva.fasta"}  # /home/ec2-user/efs/docker/PacBio/Assemblies/BLAST/UHGGdb/extended_db/UHGG_isolates_ext"}
@@ -49,7 +51,7 @@ docker container run --rm \
             -db ${DBNAME} \
             -outfmt 11 \
             -dbsize 1000000 \
-            -num_alignments 200
+            -num_alignments 20
             # -gapopen 0 \
             # -gapextend 0 \
 

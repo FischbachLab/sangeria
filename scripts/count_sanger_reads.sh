@@ -3,7 +3,7 @@
 set -euoE pipefail
 
 file=${1:?"Specify an input file  as argv[1]"}
-primer_set="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts/4primers"
+primer_set="/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/4primers"
 
 sample=$(basename ${file} )
 sample=${sample%.json}

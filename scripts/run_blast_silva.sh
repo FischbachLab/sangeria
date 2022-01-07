@@ -6,10 +6,11 @@ set -o pipefail
 
 TASK=${TASK:-"blastn"}
 QUERY_EXT=${QUERY_EXT:-".fa"}
-THREADS=${THREADS:-8}
+THREADS=${THREADS:-12}
 
 QUERY_PATH=${1}
-LOCAL_DB=${2:-"/home/ec2-user/efs/docker/Xmeng/16S/Sanger/silva_db/SILVA_138.1_SSURef_NR99_tax_silva.fasta"}
+#LOCAL_DB=${2:-"/mnt/efs/databases/Blast/Silva/v138.1/silva138"}
+LOCAL_DB=${2:-"/mnt/efs/scratch/Xmeng/data/16S/Sanger/silva_db/SILVA_138.1_SSURef_NR99_tax_silva.fasta"}
 RESULTS_PATH=$(echo "${QUERY_PATH}" | sed -e "s/queries/results/" -e "s/${QUERY_EXT}/.${TASK}.archive/")
 
 # BASE_PATH="/home/ec2-user/efs/docker/PacBio/Assemblies/BLAST/UHGGdb"

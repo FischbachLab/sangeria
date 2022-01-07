@@ -5,9 +5,9 @@
 import pandas as pd
 import sys
 
-silva_db="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts/SILVA_138.1_SSURef_NR99.headers"
-keys_db="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts/Silva_filter_key_words.txt"
-accession_db="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts/Silva_filter_accession_ids.txt"
+silva_db="/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/SILVA_138.1_SSURef_NR99.headers"
+keys_db="/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/Silva_filter_key_words.txt"
+accession_db="/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/Silva_filter_accession_ids.txt"
 hit_counts=3
 
 def process_blast_file_filter_keywords(silva_dict, input_file, prefix):

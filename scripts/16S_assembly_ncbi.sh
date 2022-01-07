@@ -5,19 +5,19 @@ set -o pipefail
 # assemble Sanger 16S reads
 #docker container run --rm --workdir $(pwd) -v $(pwd):$(pwd) geargenomics/tracy tracy assemble -t 9 -p 0.9 -f 0.9 -o prefix *.ab1
 
-#for i in *.xls; do Rscript /home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts/split_qc.R $i && cat qc_full.csv >> all_full_qc.csv; done
+#for i in *.xls; do Rscript /mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/split_qc.R $i && cat qc_full.csv >> all_full_qc.csv; done
 
 mygroup=${1:?"Specify a Group name"}
 
 
-input_path="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/QB_RAW_DATA_by_group/${mygroup}"
+input_path="/mnt/efs/scratch/Xmeng/data/16S/Sanger/QB_RAW_DATA_by_group/${mygroup}"
 
-script_path="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts"
+script_path="/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts"
 
 ab1_path="${input_path}/all_ab1_files/"
 qc_path="${input_path}/qc_files"
 full_qc_csv="${qc_path}/all_full_qc.csv"
-primer_set="/home/ec2-user/efs/docker/Xmeng/16S/Sanger/sanger_scripts/4primers"
+primer_set="/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/4primers"
 
 # filter qc files
 
@@ -146,12 +146,12 @@ done < ${primer_set}
 
 :<<'COMMENT'
 # Search 
-for i in *.cons.fa; do bash /home/ec2-user/efs/docker/Xmeng/16S/Sanger/PM013_2/run_blast_silva.sh $i; done 
+for i in *.cons.fa; do bash /mnt/efs/scratch/Xmeng/data/16S/Sanger/PM013_2/run_blast_silva.sh $i; done 
 #Update query name
 for i in *.cons.blastn.archive.outFmt_6.tsv; do sed -i "s/Consensus/${i%.cons.blastn.archive.outFmt_6.tsv}/" $i; done
 
 # search top 3 taxonomic 
-for i in *.cons.blastn.archive.outFmt_6.tsv; do cut -f2 $i | head -n 3 | parallel --delay 1s grep "{}" /home/ec2-user/efs/docker/Xmeng/16S/Sanger/silva_db/SILVA_138.1_SSURef_NR99_tax_silva.fasta >> $i.top3names  && sed -i -e "s/^/${i%.cons.blastn.archive.outFmt_6.tsv}\t/" $i.top3names && sed -i -e "s/>//" $i.top3names; done
+for i in *.cons.blastn.archive.outFmt_6.tsv; do cut -f2 $i | head -n 3 | parallel --delay 1s grep "{}" /mnt/efs/scratch/Xmeng/data/16S/Sanger/silva_db/SILVA_138.1_SSURef_NR99_tax_silva.fasta >> $i.top3names  && sed -i -e "s/^/${i%.cons.blastn.archive.outFmt_6.tsv}\t/" $i.top3names && sed -i -e "s/>//" $i.top3names; done
 
 # combine all results
 cat *cons.blastn.archive.outFmt_6.tsv.top3names > samples.top3names
