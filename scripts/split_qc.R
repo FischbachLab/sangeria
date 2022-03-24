@@ -15,7 +15,8 @@ col_names = c("Sample", "LOR","Q40", "Q20","Score", "QC Notes"), skip = 1
 qc_data$Score <- as.numeric(as.character(qc_data$Score))
 head(qc_data)
 
-filtered_qc <- filter(qc_data,  LOR >= 0, Score >= 25 )
+filtered_qc <- filter(qc_data,  LOR >= 0, Score >=0) # 25 )
+
 
 # split the sample name
 qc = separate(filtered_qc, col = "Sample", into = c("Sample","Primer"),  sep = "_")

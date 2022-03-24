@@ -85,6 +85,16 @@ for i in *.cons.fa; do bash ${script_path}/run_blast_silva.sh $i; done
 #Update query name
 for i in *.cons.blastn.archive.outFmt_6.tsv; do sed -i "s/Consensus/${i%.cons.blastn.archive.outFmt_6.tsv}/" $i; done
 
+# create sample -> assembled seqeunce table
+if [ -f all.cons.csv ]; then
+ rm  all.cons.csv
+fi
+
+for i in *.cons.fa; do 
+    echo -en "${i%.cons.fa}," >> all.cons.csv
+    tail -n 1 $i >>  all.cons.csv
+done
+
 if [ -f blast_outFmt_6.cmd ]; then
  rm  blast_outFmt_6.cmd
 fi
@@ -137,6 +147,7 @@ Rscript ${script_path}/summary_silva.R
 # copy files to the output folder
 cp 16S_silva_summary.csv ../$out_path/"16S_silva_summary.csv"
 cp all_samples_primer_counts.tsv ../$out_path/
+cp all.cons.csv ../$out_path/
 cp *.cons.fa  ../$out_path/"Assemblies"
 
 cd -

@@ -4,10 +4,10 @@ library(tidyverse)
 
 
 #strain_df = read_tsv("/home/ec2-user/efs/docker/Xmeng/16S/Sanger/PM013_2/genus.list", col_names = FALSE)
-top3_df = read_tsv("all_samples_top3.tsv", col_names = FALSE)
-filtered3_df = read_tsv("all_samples_filtered3.tsv", col_names = FALSE)
-cov_df = read_csv("samples.cov_stats.csv", col_names = FALSE)
-score_df = read_csv("qc_mean_score.csv", col_names = FALSE)
+top3_df <- read_tsv("all_samples_top3.tsv", col_names = FALSE)
+filtered3_df <- read_tsv("all_samples_filtered3.tsv", col_names = FALSE)
+cov_df <- read_csv("samples.cov_stats.csv", col_names = FALSE)
+score_df <- read_csv("qc_mean_score.csv", col_names = FALSE)
 
 #head (strain_df)
 #head (top3_df)

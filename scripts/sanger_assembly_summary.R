@@ -1,7 +1,7 @@
 library(tidyverse)
 
-silva_df = read_csv("16S_silva_summary.csv") #, col_names = FALSE)
-ncbi_df = read_csv("16S_ncbi_summary.csv") #, col_names = FALSE)
+silva_df <- read_csv("16S_silva_summary.csv") #, col_names = FALSE)
+ncbi_df <- read_csv("16S_ncbi_summary.csv") #, col_names = FALSE)
 
 silva_df <- select(silva_df, "Sample_ID", "Filtered_Annotation", "Filtered_Identity(%)", "Completeness(%)", "Adjusted_Qcov(%)", "Status")
 #head (silva_df)
@@ -42,5 +42,11 @@ db2_df <- mutate(db2_df, NCBI_Status = case_when( db2_df[,12] ==0 | db2_df[,13] 
                                                      db2_df[,8] >=91 & db2_df[,9] >=93.5 & db2_df[,9] < 96 & Length >= 1430 ~ "REVIEW",
                                                      TRUE ~ "FAIL"))
 
+# Add a column for assembled consensus 
+cons_df <- read_csv("all.cons.csv", col_names = FALSE)
+colnames(cons_df) <- c("Sample_ID", "Assembled_Sequence")
 
-write_csv(db2_df, "sanger_assembly_summary.csv")
+# left join
+sum_df <- merge(db2_df, cons_df, by.x = 1, by.y = 1,  all.x = TRUE)
+
+write_csv(sum_df, "sanger_assembly_summary.csv")
