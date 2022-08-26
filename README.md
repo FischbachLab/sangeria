@@ -10,17 +10,34 @@ A Sanger 16S assembly and annotation pipeline
 5. geargenomics/tracy (https://github.com/gear-genomics/tracy)
 
 
-
 ## Quick usage
 
-### 1. Assemble sanger reads and blast assemblies vs. Silva 16S database 
+Default program path: /mnt/efs/scratch/Xmeng/data/16S/Sanger
+Default assembly path: /mnt/efs/scratch/Xmeng/data/16S/Sanger/QB_RAW_DATA_by_group
+
+## 3 Steps to run the Sanger assembly and annotation:
+
+### 1. First run prepare_sanger_data.sh with the assigned group name, QuintaraBio name and order id from the excel sheet
 
 ```bash
-scripts/16S_assembly_silva.sh assembly_group_name
+bash prepare_sanger_data.sh 220727_MITI_mixed 220727_MITI_mixed 787985
 ```
 
-### 2. Blast assemblies vs. NCBI 16S database 
+### 2. Run sanger_wrapper.sh with the above group_name
 
-```bash 
-scripts/16S_assembly_ncbi.sh assembly_group_name
+```bash
+bash sanger_wrapper.sh  220727_MITI_mixed 
 ```
+
+### 3. Copy the summary and assembly files to the MITI Google Drive
+
+```bash
+copy QB_RAW_DATA_by_group/20727_MITI_mixed/789F_907R_27F_1492R_outputs/ to https://drive.google.com/drive/folders/1qc33xjhU_BtkkD0eWPEPYXkyXl_R8uV_?usp=sharing
+```
+
+## Note: 
+Default primers are listed in scripts/4primers 
+789F 907R 28F 1492R
+
+
+ 

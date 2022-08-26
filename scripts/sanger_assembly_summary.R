@@ -18,7 +18,7 @@ primer_df = read_tsv("all_samples_primer_counts.tsv", col_names = FALSE)
 # Add headers
 colnames(primer_df ) <- c("Sample_ID", "Primer", "Counts")
 primer_df <- spread(primer_df, Primer, Counts) 
-primer_df[is.na(primer_df)] = 0
+#primer_df[is.na(primer_df)] = 0
 
 #colnames(silva_df)
 #colnames(ncbi_df)
@@ -29,6 +29,14 @@ primer_df[is.na(primer_df)] = 0
 db2_df <- merge(db2_df, primer_df, by.x = 1) 
 #order the columns
 col_order <- c("Sample_ID", "Silva_Filtered_Annotation", "Silva_Filtered_Identity(%)", "Silva_Completeness(%)", "Silva_Adjusted_Qcov(%)", "NCBI_Filtered_Annotation", "NCBI_Filtered_Identity(%)", "NCBI_Completeness(%)", "NCBI_Adjusted_Qcov(%)","Length", "num_primer_reads", "28F", "789F", "907R", "1492R", "mean_coverage", "sd_coverage", "mean_qc_score", "Silva_Status", "NCBI_Status")
+
+# reads primers from a file: unlist a list of vector to combine a vector
+v1 <- c("Sample_ID", "Silva_Filtered_Annotation", "Silva_Filtered_Identity(%)", "Silva_Completeness(%)", "Silva_Adjusted_Qcov(%)", "NCBI_Filtered_Annotation", "NCBI_Filtered_Identity(%)", "NCBI_Completeness(%)", "NCBI_Adjusted_Qcov(%)","Length", "num_primer_reads")
+v2 <- unlist(strsplit( readLines("/mnt/efs/scratch/Xmeng/data/16S/Sanger/sanger_scripts/4primers"),  " " ))
+v3 <- c("mean_coverage", "sd_coverage", "mean_qc_score", "Silva_Status", "NCBI_Status")
+col_order <- c(v1, v2, v3)
+
+
 db2_df <- db2_df[, col_order]
 
 
